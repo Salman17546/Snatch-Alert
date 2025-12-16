@@ -1,0 +1,45 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.eggs
+*.egg-info
+.pytest_cache
+
+# Virtual environments
+venv
+env
+.venv
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Logs and output (will be mounted as volumes)
+logs/*
+output/*
+data/*
+!data/.gitkeep
+!logs/.gitkeep
+!output/.gitkeep
+
+# Environment files (use docker-compose env)
+.env.local
+.env.production
+
+# Documentation
+*.md
+!README.md
+
+# Test files
+tests/
+test_*.py

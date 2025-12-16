@@ -1,0 +1,42 @@
+# Environment variables (contains API keys)
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Scraper outputs and data
+*.xlsx
+output/
+data/
+logs/
+
+# Scraper lock file
+.scraper.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.env.local
+*.log
+
+# Keep example env files
+!.env.example
+!.env.docker
+!.env.production

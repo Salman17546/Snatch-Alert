@@ -1,0 +1,345 @@
+{
+  "info": {
+    "name": "SnatchAlert API",
+    "description": "Complete API collection for SnatchAlert crime reporting system",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"test@example.com\",\n  \"password\": \"TestPass123\",\n  \"password2\": \"TestPass123\",\n  \"phone\": \"+923001234567\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register", ""]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set(\"access_token\", jsonData.access);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"john_doe\",\n  \"password\": \"user123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/profile/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "profile", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Incidents",
+      "item": [
+        {
+          "name": "Create Incident",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"occurred_at\": \"2024-12-05T14:30:00Z\",\n  \"incident_type_name\": \"Mobile Snatching\",\n  \"location_data\": {\n    \"province\": \"Punjab\",\n    \"city\": \"Lahore\",\n    \"district\": \"Gulberg\",\n    \"neighborhood\": \"MM Alam Road\",\n    \"street_address\": \"Main Boulevard\",\n    \"latitude\": 31.5204,\n    \"longitude\": 74.3587\n  },\n  \"victim_data\": {\n    \"name\": \"Test Victim\",\n    \"age\": 28,\n    \"gender\": \"male\",\n    \"phone_number\": \"+923001234567\"\n  },\n  \"stolen_item_data\": {\n    \"item_type\": \"phone\",\n    \"imei\": \"111222333444555\",\n    \"phone_brand\": \"Samsung\",\n    \"phone_model\": \"Galaxy S21\",\n    \"value_estimate\": 75000\n  },\n  \"value_estimate\": 75000,\n  \"fir_filed\": true,\n  \"description\": \"Phone snatched at gunpoint\",\n  \"is_anonymous\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/reports/incidents/create/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "incidents", "create", ""]
+            }
+          }
+        },
+        {
+          "name": "List Incidents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/incidents/?city=Lahore",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "incidents", ""],
+              "query": [
+                {
+                  "key": "city",
+                  "value": "Lahore"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "My Incidents",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/incidents/my/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "incidents", "my", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "IMEI Tracking",
+      "item": [
+        {
+          "name": "Register IMEI",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imei\": \"111222333444555\",\n  \"phone_brand\": \"Samsung\",\n  \"phone_model\": \"Galaxy S21\",\n  \"owner_name\": \"Test Owner\",\n  \"owner_contact\": \"+923001234567\",\n  \"status\": \"stolen\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/reports/imei/register/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "imei", "register", ""]
+            }
+          }
+        },
+        {
+          "name": "Check IMEI",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imei\": \"123456789012345\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/reports/imei/check/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "imei", "check", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Crime Heatmap",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/heatmap/?days=30&city=Lahore",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "heatmap", ""],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "30"
+                },
+                {
+                  "key": "city",
+                  "value": "Lahore"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Area Safety Score",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/safety-score/?city=Lahore&days=90",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "safety-score", ""],
+              "query": [
+                {
+                  "key": "city",
+                  "value": "Lahore"
+                },
+                {
+                  "key": "days",
+                  "value": "90"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crime Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/statistics/?days=30",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "statistics", ""],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "30"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Alerts",
+      "item": [
+        {
+          "name": "List Alerts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/alerts/?city=Lahore",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "alerts", ""],
+              "query": [
+                {
+                  "key": "city",
+                  "value": "Lahore"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Safety Tips",
+      "item": [
+        {
+          "name": "List Safety Tips",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/core/safety-tips/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "core", "safety-tips", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Feedback",
+      "item": [
+        {
+          "name": "Submit Feedback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject\": \"App Suggestion\",\n  \"message\": \"It would be great to have push notifications\",\n  \"contact_email\": \"user@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/core/feedback/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "core", "feedback", ""]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
